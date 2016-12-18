@@ -1,0 +1,68 @@
+<html ng-app="eggly">
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/eggly.css">
+</head>
+<body ng-controller="MainCtrl">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3 col-md-3 sidebar">
+				<a href="#" ng-click="setCurrentCategory(null)"><img class="logo" src="assets/logo/eggly-logo.png"></a>
+				<ul class="nav nav-sidebar">
+					<li ng-repeat="category in categories" ng-class={'active':isCurrentCategory(category)}><a href="#" ng-click="setCurrentCategory(category)">{{category.name}}</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-9 col-md-9 main">
+				<div ng-repeat="bookmark in bookmarks | filter:{category:currentCategory.name}">
+					<button type="button" class="close">&times;</button>
+					<button type="button" ng-class="{'active':isSelectedBookmark(bookmark)}" ng-click="setEditedBookmark(bookmark);startEditing();"class="btn btn-link"><span class="glyphicon glyphicon-pencil">{{bookmark.title}}</span></button>
+					<a href="{{bookmark.url}}" target="_blank"></a>
+				</div>				
+				<hr/>
+				<!-- CREATING -->
+				<div ng-show="shouldShowCreating()">
+					<button class="btn btn-link" type="button" ng-click="startCreating()">
+						<span class="glyphicon glyphicon-plus"></span>
+						Add Bookmark
+					</button>
+					<form class="create-form" ng-show="isCreating" role="form" ng-model="createBookmark(newBookmark)" novalidate>
+						<div class="form-group">
+							<label for="newBookmarkTitle">Bookmark Title</label>
+							<input type="text" class="form-control" ng-model="newBookmark.title" id="newBookmarkTitle" placeholder="Title"/>
+						</div>
+						<div class="form-group">
+							<label for="BookmarkUrl">Bookmark URL</label>
+							<input type="text" class="form-control" ng-model="newBookmark.url" id="BookmarkUrl" placeholder="URL"/>
+						</div>
+						<button type="submit" class="btn btn-info btn-lg">Create</button>
+						<button type="button" class="btn btn-info btn-lg pull-right" ng-click="cancelCreating()">Cancel</button>
+					</form>
+				</div>
+				<!-- editing bookmark -->
+				<div ng-show="shouldShowEditing()">
+					<h4>Editing {{editedBookmark.title}}</h4>
+
+					<form class="edit-form" ng-show="isEditing" role="form" ng-model="updateBookmark(editedBookmark)" novalidate>
+						<div class="form-group">
+							<label for="newBookmarkTitle">Bookmark Title</label>
+							<input type="text" class="form-control" ng-model="editedBookmark.title" id="newBookmarkTitle" placeholder="Title"/>
+						</div>
+						<div class="form-group">
+							<label for="BookmarkUrl">Bookmark URL</label>
+							<input type="text" class="form-control" ng-model="editedBookmark.url" id="BookmarkUrl" placeholder="URL"/>
+						</div>
+						<button type="submit" class="btn btn-info btn-lg">Save</button>
+						<button type="button" class="btn btn-info btn-lg pull-right" ng-click="cancelEditing()">Cancel</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="eggly-start.js"></script>
+</body>
+</html>
